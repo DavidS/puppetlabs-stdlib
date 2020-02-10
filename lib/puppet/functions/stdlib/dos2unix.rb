@@ -29,14 +29,10 @@ Puppet::Functions.create_function(:'stdlib::dos2unix') do
   dispatch :default_impl do
     # Call the method named 'default_impl' when this is matched
     # Port this to match individual params for better type safety
-    repeated_param 'Any', :arguments
+    param 'String', :argument
   end
 
-  def default_impl(*arguments)
-    unless arguments[0].is_a?(String)
-      raise(Puppet::ParseError, 'dos2unix(): Requires string as argument')
-    end
-
-    arguments[0].gsub(%r{\r\n}, "\n")
+  def default_impl(argument)
+    argument.gsub(%r{\r\n}, "\n")
   end
 end

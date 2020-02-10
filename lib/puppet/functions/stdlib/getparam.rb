@@ -73,7 +73,7 @@ Puppet::Functions.create_function(:'stdlib::getparam') do
 
     return '' if param.empty?
 
-    resource = findresource(reference.to_s)
+    resource = closure_scope.findresource(reference.to_s)
     if resource
       return resource[param] unless resource[param].nil?
     end

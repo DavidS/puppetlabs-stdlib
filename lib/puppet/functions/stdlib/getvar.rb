@@ -40,25 +40,17 @@ Puppet::Functions.create_function(:'stdlib::getvar') do
   #   Describe what the function returns here
   #
   dispatch :default_impl do
-    # Call the method named 'default_impl' when this is matched
-    # Port this to match individual params for better type safety
-    repeated_param 'Any', :args
+    param 'Any', :name
   end
 
-  def default_impl(*args)
-    unless args.length == 1
-      raise Puppet::ParseError, "getvar(): wrong number of arguments (#{args.length}; must be 1)"
+  def default_impl(name)
+    result = nil
+    catch(:undefined_variable) do
+      result = closure_scope[name.to_s]
     end
 
-    begin
-      result = nil
-      catch(:undefined_variable) do
-        result = lookupvar((args[0]).to_s)
-      end
-
-      # avoid relying on inconsistent behaviour around ruby return values from catch
-      result
-    rescue Puppet::ParseError # rubocop:disable Lint/HandleExceptions : Eat the exception if strict_variables = true is set
-    end
+    # avoid relying on inconsistent behaviour around ruby return values from catch
+    result
+  rescue Puppet::ParseError # rubocop:disable Lint/HandleExceptions : Eat the exception if strict_variables = true is set
   end
 end

@@ -38,17 +38,18 @@ Puppet::Functions.create_function(:'stdlib::seeded_rand') do
   dispatch :default_impl do
     # Call the method named 'default_impl' when this is matched
     # Port this to match individual params for better type safety
-    repeated_param 'Any', :args
+    param 'Any', :max
+    param 'Any', :seed
   end
 
-  def default_impl(*args)
+  def default_impl(max, seed)
     require 'digest/md5'
 
-    raise(ArgumentError, 'seeded_rand(): first argument must be a positive integer') unless function_is_integer([args[0]]) && args[0].to_i > 0
-    raise(ArgumentError, 'seeded_rand(): second argument must be a string') unless args[1].is_a? String
+    raise(ArgumentError, 'seeded_rand(): first argument must be a positive integer') unless (max.is_a?(Integer) || call_function('is_integer', max)) && max.to_i > 0
+    raise(ArgumentError, 'seeded_rand(): second argument must be a string') unless seed.is_a? String
 
-    max = args[0].to_i
-    seed = Digest::MD5.hexdigest(args[1]).hex
+    max = max.to_i
+    seed = Digest::MD5.hexdigest(seed).hex
     Puppet::Util.deterministic_rand(seed, max)
   end
 end

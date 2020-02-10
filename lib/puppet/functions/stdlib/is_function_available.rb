@@ -13,16 +13,12 @@
 #
 # @summary
 #       @summary
-#      **Deprecated:** Determines whether the Puppet runtime has access to a function by that name.
+#      Determines whether the Puppet runtime has access to a function by that name.
 #
 #    This function accepts a string as an argument.
 #
 #    @return [Boolean]
 #      Returns `true` or `false`
-#
-#    > **Note:* **Deprecated** Will be removed in a future version of stdlib. See
-#    [`validate_legacy`](#validate_legacy).
-#
 #
 Puppet::Functions.create_function(:'stdlib::is_function_available') do
   # @param arguments

@@ -4,7 +4,7 @@
 module Puppet::Parser::Functions
   newfunction(:values, :type => :rvalue, :doc => <<-DOC
     @summary
-      When given a hash this function will return the values of that hash.
+      **Deprecated** When given a hash this function will return the values of that hash.
 
     @return
       array of values
@@ -20,9 +20,9 @@ module Puppet::Parser::Functions
       This example would return: ```[1,2,3]```
 
     > *Note:*
-    From Puppet 5.5.0, the compatible function with the same name in Puppet core
-    will be used instead of this function.
-
+      **Deprecated** from Puppet 5.5.0, yhis function has been replaced with a
+      built-in [`capitalize`](https://puppet.com/docs/puppet/latest/function.html#values)
+      function.
   DOC
              ) do |arguments|
 

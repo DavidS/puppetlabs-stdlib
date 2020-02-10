@@ -58,7 +58,7 @@ Puppet::Functions.create_function(:'stdlib::defined_with_params') do
       # Workaround for PE-20308
       if reference.is_a?(String)
         type_name, title = Puppet::Resource.type_and_title(reference, nil)
-        type = Puppet::Pops::Evaluator::Runtime3ResourceSupport.find_resource_type_or_class(find_global_scope, type_name.downcase)
+        type = Puppet::Pops::Evaluator::Runtime3ResourceSupport.find_resource_type_or_class(closure_scope, type_name.downcase)
       elsif reference.is_a?(Puppet::Resource)
         type = reference.type
         title = reference.title
@@ -71,7 +71,7 @@ Puppet::Functions.create_function(:'stdlib::defined_with_params') do
       title = nil
     end
 
-    resource = findresource(type, title)
+    resource = closure_scope.findresource(type, title)
     if resource
       matches = params.map do |key, value|
         # eql? avoids bugs caused by monkeypatching in puppet

@@ -67,14 +67,13 @@ Puppet::Functions.create_function(:'stdlib::ensure_resources') do
     resource_hash = title.dup
     resources = resource_hash.keys
 
-    Puppet::Parser::Functions.function(:ensure_resource)
     resources.each do |resource_name|
       params_merged = if resource_hash[resource_name]
                         params.merge(resource_hash[resource_name])
                       else
                         params
                       end
-      function_ensure_resource([type, resource_name, params_merged])
+      call_function('stdlib::ensure_resource', type, resource_name, params_merged)
     end
   end
 end

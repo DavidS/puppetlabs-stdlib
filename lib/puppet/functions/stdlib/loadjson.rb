@@ -71,7 +71,7 @@ Puppet::Functions.create_function(:'stdlib::loadjson') do
           args[1]
         end
         PSON.load(contents) || args[1]
-      elsif File.exists?(args[0]) # rubocop:disable Lint/DeprecatedClassMethods : Changing to .exist? breaks the code
+      elsif File.exist?(args[0])
         content = File.read(args[0])
         PSON.load(content) || args[1]
       else
