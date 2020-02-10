@@ -61,7 +61,7 @@ Puppet::Functions.create_function(:'stdlib::validate_domain_name') do
       raise Puppet::ParseError, "#{arg.inspect} is not a string." unless arg.is_a?(String)
 
       begin
-        raise Puppet::ParseError, "#{arg.inspect} is not a syntactically correct domain name" unless function_is_domain_name([arg])
+        raise Puppet::ParseError, "#{arg.inspect} is not a syntactically correct domain name" unless call_function('is_domain_name', arg)
       rescue *rescuable_exceptions
         raise Puppet::ParseError, "#{arg.inspect} is not a syntactically correct domain name"
       end

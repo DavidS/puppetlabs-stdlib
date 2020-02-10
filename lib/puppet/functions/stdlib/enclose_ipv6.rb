@@ -29,12 +29,10 @@ Puppet::Functions.create_function(:'stdlib::enclose_ipv6') do
   #   Describe what the function returns here
   #
   dispatch :default_impl do
-    # Call the method named 'default_impl' when this is matched
-    # Port this to match individual params for better type safety
-    repeated_param 'Any', :arguments
+    param 'Variant[String, Array]', :input
   end
 
-  def default_impl(*arguments)
+  def default_impl(input)
     require 'ipaddr'
 
     rescuable_exceptions = [ArgumentError]
@@ -42,14 +40,7 @@ Puppet::Functions.create_function(:'stdlib::enclose_ipv6') do
       rescuable_exceptions << IPAddr::InvalidAddressError
     end
 
-    if arguments.size != 1
-      raise(Puppet::ParseError, "enclose_ipv6(): Wrong number of arguments given #{arguments.size} for 1")
-    end
-    unless arguments[0].is_a?(String) || arguments[0].is_a?(Array)
-      raise(Puppet::ParseError, "enclose_ipv6(): Wrong argument type given #{arguments[0].class} expected String or Array")
-    end
-
-    input = [arguments[0]].flatten.compact
+    input = [input].flatten.compact
     result = []
 
     input.each do |val|

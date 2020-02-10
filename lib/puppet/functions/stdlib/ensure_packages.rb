@@ -31,43 +31,26 @@ Puppet::Functions.create_function(:'stdlib::ensure_packages') do
   #   Describe what the function returns here
   #
   dispatch :default_impl do
-    # Call the method named 'default_impl' when this is matched
-    # Port this to match individual params for better type safety
-    repeated_param 'Any', :arguments
+    param 'Variant[Hash, Array[String], String]', :packages
+    optional_param 'Hash', :defaults
   end
 
-  def default_impl(*arguments)
-    raise(Puppet::ParseError, "ensure_packages(): Wrong number of arguments given (#{arguments.size} for 1 or 2)") if arguments.size > 2 || arguments.empty?
-    raise(Puppet::ParseError, 'ensure_packages(): Requires second argument to be a Hash') if arguments.size == 2 && !arguments[1].is_a?(Hash)
-
-    if arguments[0].is_a?(Hash)
-      if arguments[1]
-        defaults = { 'ensure' => 'present' }.merge(arguments[1])
-        if defaults['ensure'] == 'installed'
-          defaults['ensure'] = 'present'
-        end
-      else
-        defaults = { 'ensure' => 'present' }
+  def default_impl(packages, defaults = {})
+    if defaults
+      defaults = { 'ensure' => 'present' }.merge(defaults)
+      if defaults['ensure'] == 'installed'
+        defaults['ensure'] = 'present'
       end
-
-      Puppet::Parser::Functions.function(:ensure_resources)
-      function_ensure_resources(['package', arguments[0].dup, defaults])
     else
-      packages = Array(arguments[0])
+      defaults = { 'ensure' => 'present' }
+    end
 
-      if arguments[1]
-        defaults = { 'ensure' => 'present' }.merge(arguments[1])
-        if defaults['ensure'] == 'installed'
-          defaults['ensure'] = 'present'
-        end
-      else
-        defaults = { 'ensure' => 'present' }
-      end
-
-      Puppet::Parser::Functions.function(:ensure_resource)
-      packages.each do |package_name|
+    if packages.is_a?(Hash)
+      call_function('stdlib::ensure_resources', 'package', packages.dup, defaults)
+    else
+      Array(packages).each do |package_name|
         raise(Puppet::ParseError, 'ensure_packages(): Empty String provided for package name') if package_name.empty?
-        function_ensure_resource(['package', package_name, defaults])
+        call_function('stdlib::ensure_resource', 'package', package_name, defaults)
       end
     end
   end

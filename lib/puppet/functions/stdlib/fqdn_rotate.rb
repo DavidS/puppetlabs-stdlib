@@ -61,7 +61,7 @@ Puppet::Functions.create_function(:'stdlib::fqdn_rotate') do
 
     elements = result.size
 
-    seed = Digest::MD5.hexdigest([lookupvar('::fqdn'), args].join(':')).hex
+    seed = Digest::MD5.hexdigest([closure_scope['::fqdn'], args].join(':')).hex
     # deterministic_rand() was added in Puppet 3.2.0; reimplement if necessary
     if Puppet::Util.respond_to?(:deterministic_rand)
       offset = Puppet::Util.deterministic_rand(seed, elements).to_i

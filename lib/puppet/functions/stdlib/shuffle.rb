@@ -42,7 +42,7 @@ Puppet::Functions.create_function(:'stdlib::shuffle') do
       raise(Puppet::ParseError, 'shuffle(): Requires either array or string to work with')
     end
 
-    result = value.clone
+    result = value.dup
 
     string = value.is_a?(String) ? true : false
 

@@ -48,7 +48,7 @@ Puppet::Functions.create_function(:'stdlib::zip') do
       raise(Puppet::ParseError, 'zip(): Requires array to work with')
     end
 
-    flatten = function_str2bool([arguments[2]]) if arguments[2]
+    flatten = call_function('stdlib::str2bool', arguments[2]) if arguments[2]
 
     result = a.zip(b)
     result = flatten ? result.flatten : result

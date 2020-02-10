@@ -53,11 +53,11 @@ Puppet::Functions.create_function(:'stdlib::upcase') do
 
     if value.is_a?(Array)
       # Numbers in Puppet are often string-encoded which is troublesome ...
-      result = value.map { |i| function_upcase([i]) }
+      result = value.map { |i| default_impl(i) }
     elsif value.is_a?(Hash)
       result = {}
       value.each_pair do |k, v|
-        result[function_upcase([k])] = function_upcase([v])
+        result[default_impl(k)] = default_impl(v)
       end
     else
       result = value.upcase

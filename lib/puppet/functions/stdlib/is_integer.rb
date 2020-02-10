@@ -43,8 +43,8 @@ Puppet::Functions.create_function(:'stdlib::is_integer') do
   end
 
   def default_impl(*arguments)
-    function_deprecation([:is_integer, 'This method is deprecated, please use the stdlib validate_legacy function,
-                            with Stdlib::Compat::Integer. There is further documentation for validate_legacy function in the README.'])
+    call_function('stdlib::deprecation', 'is_integer', 'This method is deprecated, please use the stdlib validate_legacy function,
+                            with Stdlib::Compat::Integer. There is further documentation for validate_legacy function in the README.')
 
     if arguments.size != 1
       raise(Puppet::ParseError, "is_integer(): Wrong number of arguments given #{arguments.size} for 1")

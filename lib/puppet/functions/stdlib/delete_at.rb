@@ -67,7 +67,7 @@ Puppet::Functions.create_function(:'stdlib::delete_at') do
       raise(Puppet::ParseError, 'delete_at(): You must provide non-negative numeric index')
     end
 
-    result = array.clone
+    result = array.dup
 
     # Numbers in Puppet are often string-encoded which is troublesome ...
     index = index.to_i

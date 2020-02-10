@@ -46,24 +46,18 @@ Puppet::Functions.create_function(:'stdlib::convert_base') do
   #
   dispatch :default_impl do
     # Call the method named 'default_impl' when this is matched
-    # Port this to match individual params for better type safety
-    repeated_param 'Any', :args
+    param 'Variant[Integer, String]', :number_to_convert
+    param 'Variant[Integer, String]', :new_base
   end
 
-  def default_impl(*args)
-    raise Puppet::ParseError, 'convert_base(): First argument must be either a string or an integer' unless args[0].is_a?(Integer) || args[0].is_a?(String)
-    raise Puppet::ParseError, 'convert_base(): Second argument must be either a string or an integer' unless args[1].is_a?(Integer) || args[1].is_a?(String)
-
-    if args[0].is_a?(String)
-      raise Puppet::ParseError, 'convert_base(): First argument must be an integer or a string corresponding to an integer in base 10' unless args[0] =~ %r{^[0-9]+$}
+  def default_impl(number_to_convert, new_base)
+    if number_to_convert.is_a?(String)
+      raise Puppet::ParseError, 'convert_base(): First argument must be an integer or a string corresponding to an integer in base 10' unless number_to_convert =~ %r{^[0-9]+$}
     end
 
-    if args[1].is_a?(String)
-      raise Puppet::ParseError, 'convert_base(): First argument must be an integer or a string corresponding to an integer in base 10' unless args[1] =~ %r{^[0-9]+$}
+    if new_base.is_a?(String)
+      raise Puppet::ParseError, 'convert_base(): First argument must be an integer or a string corresponding to an integer in base 10' unless new_base =~ %r{^[0-9]+$}
     end
-
-    number_to_convert = args[0]
-    new_base = args[1]
 
     number_to_convert = number_to_convert.to_i
     new_base = new_base.to_i

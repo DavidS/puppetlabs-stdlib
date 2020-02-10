@@ -38,15 +38,14 @@ Puppet::Functions.create_function(:'stdlib::assert_private') do
   def default_impl(*args)
     raise(Puppet::ParseError, "assert_private(): Wrong number of arguments given (#{args.size}}) for 0 or 1)") if args.size > 1
 
-    scope = self
-    return unless scope.lookupvar('module_name') != scope.lookupvar('caller_module_name')
+    return unless closure_scope['module_name'] != closure_scope['caller_module_name']
 
     message = nil
     if args[0] && args[0].is_a?(String)
       message = args[0]
     else
-      manifest_name = scope.source.name
-      manifest_type = scope.source.type
+      manifest_name = closure_scope.source.name
+      manifest_type = closure_scope.source.type
       message = (manifest_type.to_s == 'hostclass') ? 'Class' : 'Definition'
       message += " #{manifest_name} is private"
     end

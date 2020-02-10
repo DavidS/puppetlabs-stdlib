@@ -54,7 +54,7 @@ Puppet::Functions.create_function(:'stdlib::bool2num') do
   def default_impl(*arguments)
     raise(Puppet::ParseError, "bool2num(): Wrong number of arguments given (#{arguments.size} for 1)") if arguments.empty?
 
-    value = function_str2bool([arguments[0]])
+    value = call_function('stdlib::str2bool', *arguments)
 
     # We have real boolean values as well ...
     result = value ? 1 : 0

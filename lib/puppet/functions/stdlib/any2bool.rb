@@ -68,12 +68,12 @@ Puppet::Functions.create_function(:'stdlib::any2bool') do
                   end
 
     if arg.is_a?(Numeric)
-      return function_num2bool([arguments[0]])
+      return call_function('stdlib::num2bool', arguments[0])
     end
 
     if arg.is_a?(String)
-      return function_num2bool([arguments[0]]) if valid_float
-      return function_str2bool([arguments[0]])
+      return call_function('stdlib::num2bool', arguments[0]) if valid_float
+      return call_function('stdlib::str2bool', arguments[0])
     end
 
     true

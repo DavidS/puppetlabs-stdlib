@@ -45,7 +45,7 @@ Puppet::Functions.create_function(:'stdlib::has_interface_with') do
   def default_impl(*args)
     raise(Puppet::ParseError, "has_interface_with(): Wrong number of arguments given (#{args.size} for 1 or 2)") if args.empty? || args.size > 2
 
-    interfaces = lookupvar('interfaces')
+    interfaces = closure_scope['interfaces']
 
     # If we do not have any interfaces, then there are no requested attributes
     return false if interfaces == :undefined || interfaces.nil?
@@ -63,7 +63,7 @@ Puppet::Functions.create_function(:'stdlib::has_interface_with') do
     factval = nil
     begin
       catch :undefined_variable do
-        factval = lookupvar(kind)
+        factval = closure_scope[kind]
       end
     rescue Puppet::ParseError # rubocop:disable Lint/HandleExceptions : Eat the exception if strict_variables = true is set
     end
@@ -79,7 +79,7 @@ Puppet::Functions.create_function(:'stdlib::has_interface_with') do
         # Bug with 3.7.1 - 3.7.3 when using future parser throws :undefined_variable
         # https://tickets.puppetlabs.com/browse/PUP-3597
         catch :undefined_variable do
-          factval = lookupvar("#{kind}_#{iface}")
+          factval = closure_scope["#{kind}_#{iface}"]
         end
       rescue Puppet::ParseError # rubocop:disable Lint/HandleExceptions : Eat the exception if strict_variables = true is set
       end

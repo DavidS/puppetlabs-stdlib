@@ -39,9 +39,6 @@ Puppet::Functions.create_function(:'stdlib::has_ip_network') do
   def default_impl(*args)
     raise(Puppet::ParseError, "has_ip_network(): Wrong number of arguments given (#{args.size} for 1)") if args.size != 1
 
-    Puppet::Parser::Functions.autoloader.load(:has_interface_with) \
-      unless Puppet::Parser::Functions.autoloader.loaded?(:has_interface_with)
-
-    function_has_interface_with(['network', args[0]])
+    call_function('stdlib::has_interface_with', 'network', args[0])
   end
 end

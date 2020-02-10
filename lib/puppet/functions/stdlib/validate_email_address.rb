@@ -58,7 +58,7 @@ Puppet::Functions.create_function(:'stdlib::validate_email_address') do
       raise Puppet::ParseError, "#{arg.inspect} is not a string." unless arg.is_a?(String)
 
       begin
-        raise Puppet::ParseError, "#{arg.inspect} is not a valid email address" unless function_is_email_address([arg])
+        raise Puppet::ParseError, "#{arg.inspect} is not a valid email address" unless call_function('is_email_address', arg)
       rescue *rescuable_exceptions
         raise Puppet::ParseError, "#{arg.inspect} is not a valid email address"
       end
